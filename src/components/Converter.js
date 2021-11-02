@@ -1,17 +1,28 @@
 import React, { Component } from 'react'
 
+import { Container, Button, Row, Col, Badge, Form, FormControl, InputGroup, Card} from 'react-bootstrap';
+
 export default class Converter extends Component {
 
     constructor(props){
         super(props);
 
         this.state = {
-            base_value: "",
+            base_value: 0,
             second_value: 0,
         }
-        
+
         this.currencyConverter = this.currencyConverter.bind(this);
+        this.onchangeHandler = this.onchangeHandler.bind(this);
+
     }
+  
+
+    onchangeHandler(event) {
+        this.setState({base_value:event.target.value});
+        this.currencyConverter();  
+    }
+
 
     currencyConverter() {
 
@@ -27,17 +38,55 @@ export default class Converter extends Component {
 
             let conversionValue = json[from_to];
             let second_value= (parseFloat(this.state.base_value) * conversionValue).toFixed(2);
-            this.setState({second_value})
+            this.setState({second_value});
+            
         })
     }
 
     render() {
         return (
             <div>
-                <h2>From {this.props.baseCurrency} to {this.props.secondCurrency}</h2>
-                <input type="text" placeholder="Amount" onChange={(event)=>{this.setState({base_value:event.target.value})}}></input>
-                <input type="button" value="Converter" onClick={this.currencyConverter}></input>
-                <h2>Result: {this.state.second_value} {this.props.secondCurrency}</h2>
+                <Currencies />
+                <Container fluid>
+                    <Card>
+                        <Card.Header>
+                            <Row>
+                                <Col md={12}><h3>Simple Currency Converter made with React</h3></Col>
+                            </Row>
+                            <Row>
+                                <Col md={12}><h4>From <Badge bg="primary">{this.props.baseCurrency}</Badge> to <Badge bg="primary">{this.props.secondCurrency}</Badge></h4></Col>
+                            </Row>
+                        </Card.Header>
+                        <Card.Body>
+                            <Row>
+                                <Col md>
+                                    <Form.Label htmlFor="Amount">Amount</Form.Label>
+                                    <InputGroup className="mb-3">
+                                        <FormControl aria-describedby="Amount" onChange={this.onchangeHandler.bind(this)}/>
+                                    </InputGroup>
+                                </Col>
+                                <Col md>
+                                    <Form.Label htmlFor="From">From</Form.Label>
+                                    <Form.Select aria-label="From">
+                                        <option></option>
+                                        <option value="1">EUR</option>
+                                    </Form.Select>
+                                </Col>
+                                <Col md>
+                                    <Form.Label htmlFor="To">To</Form.Label>
+                                    <Form.Select aria-label="To">
+                                        <option></option>
+                                        <option value="1">BRL</option>
+                                    </Form.Select>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col md={8}><h2>{this.state.base_value} {this.props.baseCurrency} = {this.state.second_value} {this.props.secondCurrency} </h2></Col>
+                            </Row>
+                        </Card.Body>
+                    </Card>
+                </Container>
+                    
             </div>
         )
     }
