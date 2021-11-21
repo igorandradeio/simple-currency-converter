@@ -1,2 +1,2 @@
-# simple-currency-converter [Under Construction]
+# simple-currency-converter
 Simple Currency Converter made with React js
